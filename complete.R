@@ -18,16 +18,11 @@ complete <- function(directory, id = 1:332) {
     fileToRead<-paste(directory,"/",formatC(int, width=3, flag="0"),".csv", sep="")
     monitorReadings<-read.csv(fileToRead)
     
-    nobs<-0
-    for (j in 1:nrow(monitorReadings)) {
-      if (!is.na(monitorReadings$nitrate[j]) & !is.na(monitorReadings$sulfate[j])) nobs<-nobs+1
-    }
-    
     if (length(dataFrame) == 0) {
-      dataFrame<-data.frame(int,nobs)
+      dataFrame<-data.frame(int,sum(complete.cases(monitorReadings$nitrate, monitorReadings$sulfate)))
     }
     else {
-      dataFrame<-rbind(dataFrame,c(int,nobs))
+      dataFrame<-rbind(dataFrame,c(int,sum(complete.cases(monitorReadings$nitrate, monitorReadings$sulfate))))
     }
   }
   colnames(dataFrame)<-c("id","nobs")
